@@ -1,16 +1,18 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { ROOT_ROUTES } from '@common/constants/routes';
-
-import { HomeView } from '../views/Home';
+import { ROUTES } from '@common/constants/routes';
+import { SignUpView } from '@views/SignUp';
+import { HomeView } from '@views/Home';
 
 export const RootRouter = () => (
   <BrowserRouter>
-    <Switch>
-      <Route path={ROOT_ROUTES.HOME}>
-        <HomeView />
+    <Routes>
+      <Route path="/">
+        <Route path={ROUTES.SIGN_UP} element={<SignUpView />} />
+
+        <Route index path={ROUTES.HOME} element={<HomeView />} />
       </Route>
-    </Switch>
+    </Routes>
   </BrowserRouter>
 );

@@ -1,5 +1,5 @@
-import { exampleSlice } from '../ducks/example/example.slice';
+import { authReducer } from '@ducks/auth/auth.slices';
 
 export const reducers = {
-  example: exampleSlice.reducer,
+  auth: authReducer,
 };
