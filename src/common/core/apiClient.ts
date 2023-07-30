@@ -76,7 +76,7 @@ export class APIClient {
     props: GetRequestProps
   ) {
     const { params: _params, ...requestProps } = props;
-    const params = Object.entries(_params).reduce(
+    const params = Object.entries(_params || {}).reduce(
       (accum, [key, param]) => ({ ...accum, [key]: `${param}` }),
       {}
     );
@@ -86,7 +86,7 @@ export class APIClient {
     return this.makeRequest<R, E>(urlWithParams, requestProps);
   }
 
-  post<T, R = unknown, E extends Error = Error>(
+  post<R = unknown, E extends Error = Error, T = unknown>(
     url: string,
     props: MethodedRequestPropsWithBody<T>
   ) {
@@ -96,7 +96,7 @@ export class APIClient {
     } as RequestInit);
   }
 
-  put<T, R = unknown, E extends Error = Error>(
+  put<R = unknown, E extends Error = Error, T = unknown>(
     url: string,
     props: MethodedRequestPropsWithBody<T>
   ) {
@@ -106,7 +106,7 @@ export class APIClient {
     } as RequestInit);
   }
 
-  patch<T, R = unknown, E extends Error = Error>(
+  patch<R = unknown, E extends Error = Error, T = unknown>(
     url: string,
     props: MethodedRequestPropsWithBody<T>
   ) {
@@ -116,7 +116,7 @@ export class APIClient {
     } as RequestInit);
   }
 
-  delete<T, R = unknown, E extends Error = Error>(
+  delete<R = unknown, E extends Error = Error, T = unknown>(
     url: string,
     props: MethodedRequestPropsWithBody<T>
   ) {

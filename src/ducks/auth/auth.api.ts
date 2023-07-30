@@ -1,3 +1,4 @@
+import { API_ENPOINTS } from '@common/constants/api';
 import { guestApiClient } from '@common/helpers/apiClient';
 import {
   APIAuthResponse,
@@ -7,12 +8,12 @@ import {
 
 export const authApi = {
   signUp: (body: APISignUpPayload) =>
-    guestApiClient.post<APISignUpPayload, APIAuthResponse>('auth/signup', {
+    guestApiClient.post<APIAuthResponse>(API_ENPOINTS.SIGN_UP, {
       body,
     }),
 
   login: (body: APILoginPayload) =>
-    guestApiClient.post<APILoginPayload, APIAuthResponse>('auth/signin', {
+    guestApiClient.post<APIAuthResponse>(API_ENPOINTS.SIGN_IN, {
       body,
     }),
 };

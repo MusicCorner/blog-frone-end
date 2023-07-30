@@ -17,7 +17,17 @@ export interface APIPaginationPayload<S = APIDefaultSortBy> {
   sortBy: S;
 }
 
+export type PartialAPIPaginationPayload = Partial<APIPaginationPayload>;
+
 export interface APIError {
   status: number;
   message: string;
+}
+
+export interface APIListResponse<T> {
+  page: number;
+  onPage: number;
+  pagesCount: number;
+  count: number;
+  data: T[];
 }
