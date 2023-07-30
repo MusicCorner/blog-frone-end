@@ -8,3 +8,13 @@ export interface APISignUpPayload extends APILoginPayload {
   lastName: string;
   email: string;
 }
+
+export interface APIAuthResponse {
+  access_token: string;
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}

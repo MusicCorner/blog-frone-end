@@ -16,6 +16,7 @@ import { APISignUpPayload } from '@common/types/api/auth';
 import { signUpSlice } from '@ducks/auth/auth.slices';
 import { useAppSelector } from '@common/hooks/useAppSelector';
 import { theme } from '@common/mui/theme';
+import { useOnSuccessAuth } from '@common/hooks/useOnSuccessAuth';
 
 export interface SignUpFormData extends APISignUpPayload {
   confirmPassword: string;
@@ -36,6 +37,8 @@ export const SignUpView = () => {
   });
 
   const dispatch = useDispatch();
+
+  useOnSuccessAuth(signUpSlice.selectors.asyncState);
 
   const onSubmit = (data: SignUpFormData) => {
     dispatch(signUpSlice.actions.request(data));

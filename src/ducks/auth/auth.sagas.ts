@@ -1,16 +1,29 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { call, put, takeLatest } from 'redux-saga/effects';
 
-import { APILoginPayload, APISignUpPayload } from '@common/types/api/auth';
+import {
+  APIAuthResponse,
+  APILoginPayload,
+  APISignUpPayload,
+} from '@common/types/api/auth';
 import { APIError } from '@common/types/api/common';
+import {
+  LocalStorageKeys,
+  LocalStorageService,
+} from '@common/helpers/LocalStorageService';
 
 import { authApi } from './auth.api';
 import { loginSlice, signUpSlice } from './auth.slices';
 
+function* successAuthSaga({ access_token }: APIAuthResponse) {
+  yield LocalStorageService.set(LocalStorageKeys.AccessToken, access_token);
+}
+
 function* signUpSaga({ payload }: PayloadAction<APISignUpPayload>) {
   try {
-    yield call(authApi.signUp, payload);
+    const response = (yield call(authApi.signUp, payload)) as APIAuthResponse;
 
+    yield call(successAuthSaga, response);
     yield put(signUpSlice.actions.success());
   } catch (error) {
     yield put(signUpSlice.actions.error(error as APIError));
@@ -19,8 +32,9 @@ function* signUpSaga({ payload }: PayloadAction<APISignUpPayload>) {
 
 function* loginSaga({ payload }: PayloadAction<APILoginPayload>) {
   try {
-    yield call(authApi.login, payload);
+    const response = (yield call(authApi.login, payload)) as APIAuthResponse;
 
+    yield call(successAuthSaga, response);
     yield put(loginSlice.actions.success());
   } catch (error) {
     yield put(loginSlice.actions.error(error as APIError));
