@@ -1,15 +1,17 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
+import { normalize } from 'normalizr';
 
 import {
   APIGETPostsSuccess,
-  APIGetPostSuccess,
   APIGetPostsRequest,
 } from '@common/types/api/posts';
-import { EntitiesState } from '@common/types/slices/common';
+import { usersEntitiesSlice } from '@ducks/users/users.slices';
 
 import { getPostsSlice, postsEntitiesSlice } from './posts.slices';
 import { postsApi } from './posts.api';
+import { postsSchema } from './posts.schemas';
+import { NormalizedPostsAPIEntities } from './posts.types';
 
 function* getPostsSaga({ payload }: PayloadAction<APIGetPostsRequest>) {
   try {
@@ -18,13 +20,16 @@ function* getPostsSaga({ payload }: PayloadAction<APIGetPostsRequest>) {
       payload
     )) as APIGETPostsSuccess;
 
-    const ids = data.map((post) => post.id);
-    const entities = data.reduce(
-      (accum, value) => ({ ...accum, [value.id]: value }),
-      {} as EntitiesState<APIGetPostSuccess>
+    const {
+      entities: { posts, user },
+      result: ids,
+    } = normalize<undefined, NormalizedPostsAPIEntities, string[]>(
+      data,
+      postsSchema
     );
 
-    yield put(postsEntitiesSlice.actions.set(entities));
+    yield put(postsEntitiesSlice.actions.set(posts));
+    yield put(usersEntitiesSlice.actions.set(user));
     yield put(getPostsSlice.actions.success({ data: ids, ...listData }));
   } catch (error) {
     yield put(getPostsSlice.actions.error(error as string));

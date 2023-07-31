@@ -2,15 +2,15 @@ import { AsyncState, createAsyncSlice } from 'create-async-slice';
 import { combineReducers } from 'redux';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { EntitiesState } from '@common/types/slices/common';
 import {
   APICreatePost,
   APIDeletePost,
   APIEditPost,
-  APIGetPostSuccess,
   APIGetPostsRequest,
 } from '@common/types/api/posts';
 import { APIListResponse } from '@common/types/api/common';
+
+import { NormalizedPostsState } from './posts.types';
 
 export type GetPostsAsyncState = APIListResponse<string>;
 
@@ -26,12 +26,12 @@ export interface PostsRootState {
 }
 
 export const postsEntitiesSlice = createSlice({
-  name: 'entities',
-  initialState: {} as EntitiesState<APIGetPostSuccess>,
+  name: 'postsEntities',
+  initialState: {} as NormalizedPostsState,
   reducers: {
     set: (
-      state: EntitiesState<APIGetPostSuccess>,
-      { payload }: PayloadAction<EntitiesState<APIGetPostSuccess>>
+      state: NormalizedPostsState,
+      { payload }: PayloadAction<NormalizedPostsState>
     ) => ({ ...state, ...payload }),
   },
 });
@@ -41,7 +41,7 @@ export const getPostsSlice = createAsyncSlice<
   GetPostsAsyncState,
   string
 >({
-  name: 'get',
+  name: 'getPosts',
   selectAsyncState: (state: PostsRootState) => state.posts.get,
 });
 
@@ -50,7 +50,7 @@ export const createPostSlice = createAsyncSlice<
   undefined,
   string
 >({
-  name: 'create',
+  name: 'createPost',
   selectAsyncState: (state: PostsRootState) => state.posts.create,
 });
 
@@ -59,12 +59,12 @@ export const deletePostSlice = createAsyncSlice<
   undefined,
   string
 >({
-  name: 'delete',
+  name: 'deletePost',
   selectAsyncState: (state: PostsRootState) => state.posts.delete,
 });
 
 export const editPostSlice = createAsyncSlice<APIEditPost, undefined, string>({
-  name: 'edit',
+  name: 'editPost',
   selectAsyncState: (state: PostsRootState) => state.posts.edit,
 });
 
